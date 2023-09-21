@@ -46,11 +46,11 @@ func main() {
 		}
 	}()
 
-	server := Server{}
+	handler := Handler{}
 	for {
 		select {
 		case c := <-connections:
-			go server.Serve(ctx, c)
+			go handler.Handle(ctx, c)
 		case <-sig:
 			log.Println("received signal, shutting down")
 			cancel()
