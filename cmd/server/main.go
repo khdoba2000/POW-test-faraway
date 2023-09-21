@@ -9,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 	"test-faraway/configs"
+
+	"test-faraway/handler"
 )
 
 func main() {
@@ -46,7 +48,12 @@ func main() {
 		}
 	}()
 
-	handler := Handler{}
+	handler := handler.Handler{
+		MinLengthChallenge: cfg.MinLengthChallenge,
+		MaxLengthChallenge: cfg.MaxLengthChallenge,
+		DifficultyLength:   cfg.DifficultyLength,
+		SolutionLength:     cfg.SolutionLength,
+	}
 	for {
 		select {
 		case c := <-connections:

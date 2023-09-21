@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"context"
@@ -8,14 +8,11 @@ import (
 	"test-faraway/pkg/pow"
 )
 
-const (
-	maxLengthChallenge = 20
-	minLengthChallenge = 10
-	difficultyLength   = 6
-	solutionLength     = 5
-)
-
 type Handler struct {
+	MaxLengthChallenge int
+	MinLengthChallenge int
+	DifficultyLength   int
+	SolutionLength     int
 }
 
 func (h *Handler) Handle(ctx context.Context, conn net.Conn) error {
@@ -29,9 +26,9 @@ func (h *Handler) Handle(ctx context.Context, conn net.Conn) error {
 	log.Println("received conn:", conn)
 
 	challenge := entity.Challenge{
-		Challenge:      pow.GenerateChallengeStr(minLengthChallenge, maxLengthChallenge),
-		Difficulty:     difficultyLength,
-		SolutionLength: solutionLength,
+		Challenge:      pow.GenerateChallengeStr(h.MinLengthChallenge, h.MaxLengthChallenge),
+		Difficulty:     h.DifficultyLength,
+		SolutionLength: h.SolutionLength,
 	}
 
 	challangeStr, err := challenge.EncodeToString()

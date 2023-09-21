@@ -24,8 +24,12 @@ func Config() *Configuration {
 
 // Configuration ...
 type Configuration struct {
-	ServerPort string
-	ServerHost string
+	ServerPort         string
+	ServerHost         string
+	MaxLengthChallenge int
+	MinLengthChallenge int
+	DifficultyLength   int
+	SolutionLength     int
 }
 
 func load() *Configuration {
@@ -44,6 +48,10 @@ func load() *Configuration {
 
 	config.ServerPort = v.GetString("SERVER_PORT")
 	config.ServerHost = v.GetString("SERVER_HOST")
+	config.MaxLengthChallenge = v.GetInt("MAX_LENGTH_CHALLENGE")
+	config.MinLengthChallenge = v.GetInt("MIN_LENGTH_CHALLENGE")
+	config.DifficultyLength = v.GetInt("DIFFICULTY_LENGTH")
+	config.SolutionLength = v.GetInt("SOLUTION_LENGTH")
 
 	//validate the configuration
 	err = config.validate()
@@ -57,6 +65,9 @@ func load() *Configuration {
 func (c *Configuration) validate() error {
 	if c.ServerPort == "" {
 		return errors.New("SERVER_PORT required")
+	}
+	if c.ServerHost == "" {
+		return errors.New("SERVER_HOST required")
 	}
 
 	// ....
