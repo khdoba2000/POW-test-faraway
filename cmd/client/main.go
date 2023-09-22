@@ -10,13 +10,10 @@ import (
 	"time"
 )
 
-const (
-	powCalculationTimeSeconds = 100
-)
-
 func main() {
 	cfg := configs.Config()
-	conn, err := net.Dial("tcp", cfg.ServerHost+":"+cfg.ServerPort)
+	serverAddress := cfg.ServerHost + ":" + cfg.ServerPort
+	conn, err := net.Dial("tcp", serverAddress)
 	if err != nil {
 		log.Fatal("failed to connect to the server", err)
 	}
@@ -29,7 +26,6 @@ func main() {
 		log.Fatal("failed to read from the server", err)
 	}
 
-	log.Println("challenge response:", string(bytes[:n]))
 	challenge := entity.Challenge{}
 	err = challenge.DecodeFromBytes(bytes[:n])
 	if err != nil {
@@ -38,7 +34,7 @@ func main() {
 
 	log.Println("Mining started...")
 
-	timeOut, cancel := context.WithTimeout(context.Background(), time.Second*powCalculationTimeSeconds)
+	timeOut, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(cfg.PowCalculationTimeSeconds))
 	defer cancel()
 	solutionChan := make(chan []byte)
 	go func() {
@@ -63,11 +59,9 @@ func main() {
 			break
 		}
 		log.Print("read message from server: ", string(bytes[:n]))
-		break
 
 	case <-timeOut.Done():
 		log.Print("pow calculation timed out.")
-		break
 	}
 
 }

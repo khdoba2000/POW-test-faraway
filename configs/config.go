@@ -24,18 +24,17 @@ func Config() *Configuration {
 
 // Configuration ...
 type Configuration struct {
-	ServerPort         string
-	ServerHost         string
-	MaxLengthChallenge int
-	MinLengthChallenge int
-	DifficultyLength   int
-	SolutionLength     int
+	ServerPort                string
+	ServerHost                string
+	MaxLengthChallenge        int
+	MinLengthChallenge        int
+	DifficultyLength          int
+	SolutionLength            int
+	PowCalculationTimeSeconds int
 }
 
 func load() *Configuration {
 
-	// load .env file from given path
-	// we keep it empty it will load .env from current directory
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("error loading env file: ", err)
@@ -52,6 +51,7 @@ func load() *Configuration {
 	config.MinLengthChallenge = v.GetInt("MIN_LENGTH_CHALLENGE")
 	config.DifficultyLength = v.GetInt("DIFFICULTY_LENGTH")
 	config.SolutionLength = v.GetInt("SOLUTION_LENGTH")
+	config.PowCalculationTimeSeconds = v.GetInt("POW_CALCULATION_TIME_SECONDS")
 
 	//validate the configuration
 	err = config.validate()
@@ -69,8 +69,6 @@ func (c *Configuration) validate() error {
 	if c.ServerHost == "" {
 		return errors.New("SERVER_HOST required")
 	}
-
-	// ....
 
 	return nil
 }

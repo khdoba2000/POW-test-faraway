@@ -28,6 +28,7 @@ func PerformPoW(challenge []byte, difficulty, solutionLength int) []byte {
 	}
 }
 
+// VerifySolution checks the solution
 func VerifySolution(challenge, solution []byte, difficulty int) bool {
 
 	targetPrefix := strings.Repeat("0", difficulty) // target prefix containing the required number of leading zeros

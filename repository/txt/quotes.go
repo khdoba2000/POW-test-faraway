@@ -19,7 +19,6 @@ func NewTxtRepo(filePath string) repository.Repo {
 	}
 
 	quotes := make(map[int]string, len(lines))
-
 	for i, line := range lines {
 		quote := line
 		quotes[i] = quote

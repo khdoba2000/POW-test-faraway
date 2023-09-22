@@ -19,7 +19,8 @@ func main() {
 
 	cfg := configs.Config()
 
-	listener, err := net.Listen("tcp", cfg.ServerHost+":"+cfg.ServerPort)
+	serverAddress := cfg.ServerHost + ":" + cfg.ServerPort
+	listener, err := net.Listen("tcp", serverAddress)
 	if err != nil {
 		log.Println("failed to create tcp listener:", err)
 		panic(err)
@@ -53,13 +54,16 @@ func main() {
 	ctrl := controller.Controller{
 		Repo: txt.NewTxtRepo("static/quotes.txt"),
 	}
+
 	handler := handler.Handler{
-		MinLengthChallenge: cfg.MinLengthChallenge,
-		MaxLengthChallenge: cfg.MaxLengthChallenge,
-		DifficultyLength:   cfg.DifficultyLength,
-		SolutionLength:     cfg.SolutionLength,
-		Controller:         ctrl,
+		MinLengthChallenge:        cfg.MinLengthChallenge,
+		MaxLengthChallenge:        cfg.MaxLengthChallenge,
+		DifficultyLength:          cfg.DifficultyLength,
+		SolutionLength:            cfg.SolutionLength,
+		PowCalculationTimeSeconds: cfg.PowCalculationTimeSeconds,
+		Controller:                ctrl,
 	}
+
 	for {
 		select {
 		case c := <-connections:
