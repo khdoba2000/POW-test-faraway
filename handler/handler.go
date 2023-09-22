@@ -2,8 +2,10 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
+	"test-faraway/controller"
 	"test-faraway/entity"
 	"test-faraway/pkg/pow"
 )
@@ -13,6 +15,7 @@ type Handler struct {
 	MinLengthChallenge int
 	DifficultyLength   int
 	SolutionLength     int
+	Controller         controller.Controller
 }
 
 func (h *Handler) Handle(ctx context.Context, conn net.Conn) error {
@@ -57,8 +60,10 @@ func (h *Handler) Handle(ctx context.Context, conn net.Conn) error {
 	if pow.VerifySolution(challenge.Challenge, solution, challenge.Difficulty) {
 		log.Println("verify solution succeeded")
 
+		quote := h.Controller.GetRandomWOW()
 		//write quote to the client
-		conn.Write([]byte("quote"))
+		fmt.Println("writng quote:", quote)
+		conn.Write([]byte(quote))
 	} else {
 		log.Println("verify solution failed")
 	}

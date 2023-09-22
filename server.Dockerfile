@@ -21,5 +21,6 @@ RUN export CGO_ENABLED=0 && \
 FROM alpine
 COPY --from=builder server .
 COPY .env .env
+COPY static/quotes.txt static/quotes.txt
 
 ENTRYPOINT ["./server"]

@@ -9,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 	"test-faraway/configs"
+	"test-faraway/controller"
+	"test-faraway/repository/txt"
 
 	"test-faraway/handler"
 )
@@ -48,11 +50,15 @@ func main() {
 		}
 	}()
 
+	ctrl := controller.Controller{
+		Repo: txt.NewTxtRepo("static/quotes.txt"),
+	}
 	handler := handler.Handler{
 		MinLengthChallenge: cfg.MinLengthChallenge,
 		MaxLengthChallenge: cfg.MaxLengthChallenge,
 		DifficultyLength:   cfg.DifficultyLength,
 		SolutionLength:     cfg.SolutionLength,
+		Controller:         ctrl,
 	}
 	for {
 		select {
